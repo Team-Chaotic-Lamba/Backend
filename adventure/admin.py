@@ -13,7 +13,7 @@ admin.site.register(Player)
 
 
 # room_type = {
-#     'cave': 'cave_deco',
+#     'cave': 'rough natural walls form this room',
 #     'hall': 'hall_deco',
 # }
 

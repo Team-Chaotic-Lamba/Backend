@@ -1,4 +1,43 @@
 import random
+
+
+room_type = {
+    'Bedroom': 'This sleeping chamber is ',
+    'Hall': 'This hall is ',
+    "Kitchen": "This kitchen is ",
+    "Study": "This study is ",
+    "Laboratory": "This laboratory is ",
+    "Bath": "This bathroom is ",
+    "Storeroom": "This storeroom is ",
+    "Cellar": "This cellar is ",
+    "Shrine": "This shrine is ",
+    "Library": "This library is ",
+}
+
+deco = {
+    'Large': 'spacious with lots of light.',
+    'Small': 'cozy!',
+    "Deserted": 'dry and full of cobwebs and dust.',
+    "Damp": "water drips from the ceiling, moisture fills the air.",
+    "Dark": "dark, you can barely see!",
+    "Crowded": 'full of discarded furniture.',
+    "Evil": 'filled with an evil presence.',
+    'Secret': "well hidden, unused for a long time.",
+    "Cold": "freezing, a chill fills your body.",
+    "Hot": "hot, you begin sweating instantly."
+}
+
+# Finished title and description of every unique room possiblity 
+detailed_rooms = {}
+
+for r, rv in room_type.items():
+    for d, dv in deco.items():
+        detailed_rooms[f"{d} {r}"] = f"{rv}{dv}"
+        # print(d, r)
+
+print(detailed_rooms)
+
+
 class Generator():
     def __init__(self):
         self.dimensions = 30
@@ -55,7 +94,7 @@ class Generator():
                 lastDirection = randomDirection # set lastDirection, so we can remember what way we went
                 # self.total_rooms -= 1 # we created a whole tunnel so lets decrement how many we have left to create
         return map # all our tunnels have been created and our map is complete, so lets return it to our render()
-grid = Generator()
+# grid = Generator()
 
 # print(grid.createMap())
 # count = 0

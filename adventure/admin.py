@@ -12,19 +12,6 @@ admin.site.register(Player)
 # curl -X POST -H "Content-Type: application/json" -d '{"username":"team_chaotic", "password":"chaospass"}' localhost:8000/api/login/
 
 
-# room_type = {
-#     'cave': 'rough natural walls form this room',
-#     'hall': 'hall_deco',
-# }
-
-# cave_deco = {
-#     'damp': 'moisture fills the air and mold grows on the walls',
-#     'hot'
-# }
-
-# hall_deco = {
-
-# }
 
 # room_items = {
 #     'none': 50,

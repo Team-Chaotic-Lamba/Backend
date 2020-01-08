@@ -105,46 +105,35 @@ class Generator():
                     for k in detailed_keys:
                         if k not in self.saved_rooms:
                             self.saved_rooms[k] = detailed_rooms[k]
-                            r = Room(k, self.saved_rooms[k], current_coord)
+                            r = None
                             if map[current_row][current_column][1] is None:
+                                r = Room(k, self.saved_rooms[k], current_coord)
                                 map[current_row][current_column][1] = r
                                 map[current_row][current_column][0] = 0 # set the value of the index in map to 0 (a tunnel, making it one longer)
+                            else:
+                                r = map[current_row][current_column][1]
                             if last_direction is not None and self.prev is not None:
                                 if last_direction == [-1, 0]: # West
-                                    r.w_to = [current_row - 1, current_column]
-                                    self.prev.e_to = r.coords
-                                    # print(r.title, r.description, r.coords, r.n_to, r.s_to, r.e_to, r.w_to)
-                                    # print(self.prev.title, self.prev.description, self.prev.coords, self.prev.n_to, self.prev.s_to, self.prev.e_to, self.prev.w_to)
-                                elif last_direction == [1, 0]: # East
                                     r.e_to = [current_row + 1, current_column]
                                     self.prev.w_to = r.coords
-                                    # print(r.title, r.description, r.coords, r.n_to, r.s_to, r.e_to, r.w_to)
-                                    # print(self.prev.title, self.prev.description, self.prev.coords, self.prev.n_to, self.prev.s_to, self.prev.e_to, self.prev.w_to)
+                                elif last_direction == [1, 0]: # East
+                                    r.w_to = [current_row - 1, current_column]
+                                    self.prev.e_to = r.coords
                                 elif last_direction == [0, -1]: # North
-                                    r.n_to = [current_row, current_column - 1]
-                                    self.prev.s_to = r.coords
-                                    # print(r.title, r.description, r.coords, r.n_to, r.s_to, r.e_to, r.w_to)
-                                    # print(self.prev.title, self.prev.description, self.prev.coords, self.prev.n_to, self.prev.s_to, self.prev.e_to, self.prev.w_to)
-                                elif last_direction == [0, 1]: # South
                                     r.s_to = [current_row, current_column + 1]
                                     self.prev.n_to = r.coords
-                                    # print(r.title, r.description, r.coords, r.n_to, r.s_to, r.e_to, r.w_to)
-                                    # print(self.prev.title, self.prev.description, self.prev.coords, self.prev.n_to, self.prev.s_to, self.prev.e_to, self.prev.w_to)
-                            # if map[current_row][current_column][1] is None:
-                            #     map[current_row][current_column][1] = r
-                            self.prev = r
-                            self.room_list.append(r)
-                    #         # r.save()
+                                elif last_direction == [0, 1]: # South
+                                    r.n_to = [current_row, current_column - 1]
+                                    self.prev.s_to = r.coords
                             break
-        
-                   
+                    self.prev = map[current_row][current_column][1]
                     current_row += random_direction[0] # add the value from random_direction to row and col (-1, 0, or 1) to update our location
                     current_column += random_direction[1]
                     tunnel_length += 1 # the tunnel is now one longer, so lets increment that variable
                     if map[current_row][current_column][0] == 1:
                         self.count += 1
-            # update our variables unless our last loop broke before we made any part of a tunnel
-            if tunnel_length:
+                # update our variables unless our last loop broke before we made any part of a tunnel
+                # if tunnel_length:
                 last_direction = random_direction # set last_direction, so we can remember what way we went
                 # self.total_rooms -= 1 # we created a whole tunnel so lets decrement how many we have left to create
         return map # all our tunnels have been created and our map is complete, so lets return it to our render()
@@ -153,7 +142,7 @@ grid = Generator()
 print(grid.create_map())
 # print(grid.room_list)
 for i in Room.instances:
-    print(i.title, i.description, i.coords, i.n_to, i.s_to, i.e_to, i.w_to)
+    print(i.title, i.description, 'coords:', i.coords, '|', "NORTH:", i.n_to, "SOUTH", i.s_to, "EAST:", i.e_to,"WEST:", i.w_to)
 # print(Room.instances)
 
 # count = 0

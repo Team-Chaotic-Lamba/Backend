@@ -1,24 +1,6 @@
 import random
 import sys
 from adventure.models import Room
-# print(sys.path)
-
-# class Room():
-#     instances = []
-#     def __init__(self, id,  title, description, coords):
-#         self.id = id
-#         self.title = title
-#         self.description = description
-#         self.coords = coords
-#         self.n_to = None
-#         self.s_to = None
-#         self.e_to = None
-#         self.w_to = None
-#         # self.prev = None
-#         Room.instances.append(self)
-#     # def add_instances(self):
-        
-
 
 room_type = {
     'Bedroom': 'This sleeping chamber is ',
@@ -37,7 +19,7 @@ deco = {
     'Large': 'spacious with lots of light.',
     'Small': 'cozy!',
     "Deserted": 'dry and full of cobwebs and dust.',
-    "Damp": "water drips from the ceiling, moisture fills the air.",
+    "Damp": "wet, water drips from the ceiling, moisture fills the air.",
     "Dark": "dark, you can barely see!",
     "Crowded": 'full of discarded furniture.',
     "Evil": 'filled with an evil presence.',
@@ -105,10 +87,10 @@ class Generator():
                 else:
                     current_coord = [current_row, current_column]
                     for k in detailed_keys:
+                        r = None
                         if k not in self.saved_rooms:
-                            self.saved_rooms[k] = detailed_rooms[k]
-                            r = None
                             if map[current_row][current_column][1] is None:
+                                self.saved_rooms[k] = detailed_rooms[k]
                                 r = Room(self.count, k, self.saved_rooms[k], current_coord)
                                 r.save()
                                 map[current_row][current_column][1] = r
@@ -119,15 +101,23 @@ class Generator():
                                 if last_direction == [-1, 0]: # West
                                     r.e_to = [current_row + 1, current_column]
                                     self.prev.w_to = r.coords
+                                    r.save()
+                                    self.prev.save()
                                 elif last_direction == [1, 0]: # East
                                     r.w_to = [current_row - 1, current_column]
                                     self.prev.e_to = r.coords
+                                    r.save()
+                                    self.prev.save()
                                 elif last_direction == [0, -1]: # North
                                     r.s_to = [current_row, current_column + 1]
                                     self.prev.n_to = r.coords
+                                    r.save()
+                                    self.prev.save()
                                 elif last_direction == [0, 1]: # South
                                     r.n_to = [current_row, current_column - 1]
                                     self.prev.s_to = r.coords
+                                    r.save()
+                                    self.prev.save()
                             break
                     self.prev = map[current_row][current_column][1]
                     current_row += random_direction[0] # add the value from random_direction to row and col (-1, 0, or 1) to update our location
@@ -140,28 +130,3 @@ class Generator():
                 last_direction = random_direction # set last_direction, so we can remember what way we went
                 # self.total_rooms -= 1 # we created a whole tunnel so lets decrement how many we have left to create
         return map # all our tunnels have been created and our map is complete, so lets return it to our render()
-grid = Generator()
-# print(grid.saved_rooms)
-grid.create_map()
-# print(grid.room_list)
-for i in Room.instances:
-    print(i.title, i.description, 'coords:', i.coords, '|', "NORTH:", i.n_to, "SOUTH", i.s_to, "EAST:", i.e_to,"WEST:", i.w_to)
-# print(Room.instances)
-
-# count = 0
-# total = 0
-# for i in grid.create_map():
-#     for j in i:
-#         total += 1
-#         if j == 0:
-#             count += 1
-# print(count)
-# print("total", total)
-# directions = [[-1, 0], [1, 0], [0, -1], [0, 1]] # array to get a random direction from (west,east,north,south)
-# random_direction = directions[random.randint(0, len(directions)-1)] # next turn/direction - holds a value from directions
-# last_direction = random_direction
-# print(-last_direction[0])
-# l1 = [-1, 0]
-# l2 = [1, 0]
-# something =  [l1[i] + l2[i] for i in range(2)] 
-# print(something)

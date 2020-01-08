@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from .models import *
 from rest_framework.decorators import api_view
 import json
-# from util.map_generator import 
+
 # instantiate pusher
 # pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
 
@@ -58,6 +58,16 @@ def move(request):
     else:
         players = room.playerNames(player_id)
         return JsonResponse({'name':player.user.username, 'title':room.title, 'description':room.description, 'players':players, 'error_msg':"You cannot move that way."}, safe=True)
+
+
+
+# Get all rooms
+@api_view(["GET"])
+def all_rooms(request):
+    data = []
+    for i in Room.objects.all():
+        data.append({'title': i.title, 'description':i.description, 'coords':i.coords, 'n_to':i.n_to, 's_to':i.s_to, 'e_to':i.e_to, 'w_to':i.w_to})
+    return JsonResponse(data, safe=False)
 
 
 @csrf_exempt

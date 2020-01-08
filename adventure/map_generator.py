@@ -1,6 +1,6 @@
-from adventure.models import Room
 import random
 import sys
+from .models import *
 print(sys.path)
 
 room_type = {

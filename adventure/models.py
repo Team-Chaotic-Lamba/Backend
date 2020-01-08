@@ -6,31 +6,39 @@ from rest_framework.authtoken.models import Token
 import uuid
 
 class Room(models.Model):
+    # instances = []
+    id = models.IntegerField(primary_key=True, default=0)
     title = models.CharField(max_length=50, default="DEFAULT TITLE")
     description = models.CharField(max_length=500, default="DEFAULT DESCRIPTION")
-    n_to = models.IntegerField(default=0)
-    s_to = models.IntegerField(default=0)
-    e_to = models.IntegerField(default=0)
-    w_to = models.IntegerField(default=0)
-    def connectRooms(self, destinationRoom, direction):
-        destinationRoomID = destinationRoom.id
-        try:
-            destinationRoom = Room.objects.get(id=destinationRoomID)
-        except Room.DoesNotExist:
-            print("That room does not exist")
-        else:
-            if direction == "n":
-                self.n_to = destinationRoomID
-            elif direction == "s":
-                self.s_to = destinationRoomID
-            elif direction == "e":
-                self.e_to = destinationRoomID
-            elif direction == "w":
-                self.w_to = destinationRoomID
-            else:
-                print("Invalid direction")
-                return
-            self.save()
+    coords = models.CharField(max_length=50, default="DEFAULT COORDS") 
+    n_to = models.CharField(max_length=50, null=True, blank=True) 
+    s_to = models.CharField(max_length=50, null=True, blank=True) 
+    e_to = models.CharField(max_length=50, null=True, blank=True) 
+    w_to = models.CharField(max_length=50, null=True, blank=True) 
+    # n_to = models.IntegerField(default=0)
+    # s_to = models.IntegerField(default=0)
+    # e_to = models.IntegerField(default=0)
+    # w_to = models.IntegerField(default=0)
+    # Room.instances.append(self)
+    # def connectRooms(self, destinationRoom, direction):
+    #     destinationRoomID = destinationRoom.id
+    #     try:
+    #         destinationRoom = Room.objects.get(id=destinationRoomID)
+    #     except Room.DoesNotExist:
+    #         print("That room does not exist")
+    #     else:
+    #         if direction == "n":
+    #             self.n_to = destinationRoomID
+    #         elif direction == "s":
+    #             self.s_to = destinationRoomID
+    #         elif direction == "e":
+    #             self.e_to = destinationRoomID
+    #         elif direction == "w":
+    #             self.w_to = destinationRoomID
+    #         else:
+    #             print("Invalid direction")
+    #             return
+    #         self.save()
     def playerNames(self, currentPlayerID):
         return [p.user.username for p in Player.objects.filter(currentRoom=self.id) if p.id != int(currentPlayerID)]
     def playerUUIDs(self, currentPlayerID):
@@ -41,6 +49,7 @@ class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     currentRoom = models.IntegerField(default=0)
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
+    seen_room = models.CharField(max_length=1000, default="DEFAULT SEEN ROOMS")
     def initialize(self):
         if self.currentRoom == 0:
             self.currentRoom = Room.objects.first().id

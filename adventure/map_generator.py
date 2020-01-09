@@ -43,7 +43,7 @@ random.shuffle(detailed_keys)
 
 class Generator():
     def __init__(self):
-        self.dimensions = 30
+        self.dimensions = 24
         self.total_rooms = 100
         self.max_length = 6
         self.count = 0

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-# from pusher import Pusher
+from decouple import config
+from pusher import Pusher
 from django.http import JsonResponse
 from decouple import config
 from django.contrib.auth.models import User
@@ -10,7 +11,7 @@ from .map_generator import Generator
 import json
 
 # instantiate pusher
-# pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
+pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
 
 @csrf_exempt
 @api_view(["GET"])
@@ -65,7 +66,7 @@ def move(request):
         return JsonResponse({'name':player.user.username, "visited_room_ids": player.seen_rooms, "roomid":nextRoom.id, 'title':nextRoom.title, 'description':nextRoom.description, 'coords': nextRoom.coords, 'n_to': nextRoom.n_to, 's_to': nextRoom.s_to, 'e_to': nextRoom.e_to, 'w_to': nextRoom.w_to, 'players':players, 'error_msg':""}, safe=True)
     else:
         players = room.playerNames(player_id)
-        return JsonResponse({'name':player.user.username, "visited_room_ids": player.seen_rooms, "roomid":room.id, 'title':room.title, 'description':room.description, 'coords': room.coords, 'n_to': nextRoom.n_to, 's_to': nextRoom.s_to, 'e_to': room.e_to, 'w_to': room.w_to, 'players':players, 'error_msg':"You cannot move that way."}, safe=True)
+        return JsonResponse({'name':player.user.username, "visited_room_ids": player.seen_rooms, "roomid":room.id, 'title':room.title, 'description':room.description, 'coords': room.coords, 'n_to': room.n_to, 's_to': room.s_to, 'e_to': room.e_to, 'w_to': room.w_to, 'players':players, 'error_msg':"You cannot move that way."}, safe=True)
 
 # Get all rooms
 @api_view(["GET"])
@@ -79,8 +80,10 @@ def all_rooms(request):
 @csrf_exempt
 @api_view(["POST"])
 def say(request):
-    # IMPLEMENT
-    return JsonResponse({'error':"Not yet implemented"}, safe=True, status=500)
+    converted = json.loads(request.body)
+    user_message = {u'name': request.user.username, u'message': converted['message']}
+    pusher.trigger(u'chat', u'message', user_message)
+    return JsonResponse(user_message)
 
 @api_view(["GET"])
 def make_map(request):

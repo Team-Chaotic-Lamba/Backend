@@ -1,6 +1,6 @@
 import random
 import sys
-from adventure.models import Room
+from .models import Room
 
 room_type = {
     'Bedroom': 'This sleeping chamber is ',

@@ -61,6 +61,26 @@ def move(request):
         return JsonResponse({'name':player.user.username, 'title':room.title, 'description':room.description, 'players':players, 'error_msg':"You cannot move that way."}, safe=True)
 
 
+#  nextRoomID = None
+# nextDirect = None
+# if direction == "n":
+#     nextRoomID = room.n_to
+#     nextDirect = n_to
+# elif direction == "s":
+#     nextRoomID = room.s_to
+#     nextDirect = s_to
+# elif direction == "e":
+#     nextRoomID = room.e_to
+#     nextDirect = e_to
+# elif direction == "w":
+#     nextRoomID = room.w_to
+#     nextDirect = w_to
+# if nextRoomID is not None and nextRoomID > 0:
+#     nextRoom = Room.objects.get(room)
+#     nextRoomCoord = getattr(nextRoom, f'{nextDirect}')
+#     # for k, v in Room.objects.all():
+#     #     if nextRoomCoord = v[2]
+#     nextRoomID = nextRoomCoord
 
 # Get all rooms
 @api_view(["GET"])

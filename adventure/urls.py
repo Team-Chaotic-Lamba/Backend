@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from . import api
-from adventure.map_generator import *
+# from adventure.map_generator import *
 
 urlpatterns = [
     url('init', api.initialize),
@@ -8,5 +8,5 @@ urlpatterns = [
     url('say', api.say),
     url('rooms', api.all_rooms)
 ]
-generate = Generator()
-generate.create_map()
+# generate = Generator()
+# generate.create_map()

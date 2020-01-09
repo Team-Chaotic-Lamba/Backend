@@ -6,6 +6,7 @@ from decouple import config
 from django.contrib.auth.models import User
 from .models import *
 from rest_framework.decorators import api_view
+from .map_generator import Generator
 import json
 
 # instantiate pusher
@@ -75,3 +76,9 @@ def all_rooms(request):
 def say(request):
     # IMPLEMENT
     return JsonResponse({'error':"Not yet implemented"}, safe=True, status=500)
+
+@csrf_exempt
+@api_view(["POST"])
+def make_map(request):
+    generate = Generator()
+    generate.create_map()

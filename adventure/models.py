@@ -11,14 +11,10 @@ class Room(models.Model):
     title = models.CharField(max_length=50, default="DEFAULT TITLE")
     description = models.CharField(max_length=500, default="DEFAULT DESCRIPTION")
     coords = models.CharField(max_length=50, default="DEFAULT COORDS") 
-    n_to = models.CharField(max_length=50, null=True, blank=True) 
-    s_to = models.CharField(max_length=50, null=True, blank=True) 
-    e_to = models.CharField(max_length=50, null=True, blank=True) 
-    w_to = models.CharField(max_length=50, null=True, blank=True) 
-    # n_to = models.IntegerField(default=0)
-    # s_to = models.IntegerField(default=0)
-    # e_to = models.IntegerField(default=0)
-    # w_to = models.IntegerField(default=0)
+    n_to = models.IntegerField(null=True, blank=True) 
+    s_to = models.IntegerField(null=True, blank=True) 
+    e_to = models.IntegerField(null=True, blank=True) 
+    w_to = models.IntegerField(null=True, blank=True) 
     # Room.instances.append(self)
     # def connectRooms(self, destinationRoom, direction):
     #     destinationRoomID = destinationRoom.id
@@ -49,10 +45,11 @@ class Player(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     currentRoom = models.IntegerField(default=0)
     uuid = models.UUIDField(default=uuid.uuid4, unique=True)
-    seen_room = models.CharField(max_length=1000, default="DEFAULT SEEN ROOMS")
+    seen_rooms = models.CharField(max_length=1000, default=str(0))
     def initialize(self):
         if self.currentRoom == 0:
             self.currentRoom = Room.objects.first().id
+            self.seen_rooms = str(self.currentRoom.id)
             self.save()
     def room(self):
         try:

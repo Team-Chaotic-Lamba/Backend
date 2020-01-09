@@ -99,23 +99,23 @@ class Generator():
                                 r = map[current_row][current_column][1]
                             if last_direction is not None and self.prev is not None:
                                 if last_direction == [-1, 0]: # West
-                                    r.e_to = [current_row + 1, current_column]
-                                    self.prev.w_to = r.coords
+                                    r.e_to = self.prev.id
+                                    self.prev.w_to = r.id
                                     r.save()
                                     self.prev.save()
                                 elif last_direction == [1, 0]: # East
-                                    r.w_to = [current_row - 1, current_column]
-                                    self.prev.e_to = r.coords
+                                    r.w_to = self.prev.id
+                                    self.prev.e_to = r.id
                                     r.save()
                                     self.prev.save()
                                 elif last_direction == [0, -1]: # North
-                                    r.s_to = [current_row, current_column + 1]
-                                    self.prev.n_to = r.coords
+                                    r.s_to = self.prev.id
+                                    self.prev.n_to = r.id
                                     r.save()
                                     self.prev.save()
                                 elif last_direction == [0, 1]: # South
-                                    r.n_to = [current_row, current_column - 1]
-                                    self.prev.s_to = r.coords
+                                    r.n_to = self.prev.id
+                                    self.prev.s_to = r.id
                                     r.save()
                                     self.prev.save()
                             break

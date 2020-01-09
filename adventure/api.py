@@ -47,8 +47,12 @@ def move(request):
     if nextRoomID is not None and nextRoomID >= 0:
         nextRoom = Room.objects.get(id=nextRoomID)
         player.currentRoom=nextRoomID
-        player_set = set(player.seen_rooms)
-        if str(nextRoomID) not in player_set:
+        seen_list = player.seen_rooms.split(',')
+        seen = False
+        for i in seen_list:
+            if str(nextRoomID) == i:
+                seen = True
+        if seen == False:
             player.seen_rooms = player.seen_rooms + ',' + str(nextRoomID)
         player.save()
         players = nextRoom.playerNames(player_id)
@@ -61,14 +65,14 @@ def move(request):
         return JsonResponse({'name':player.user.username, "visited-room-ids": player.seen_rooms, "room-id":nextRoom.id, 'title':nextRoom.title, 'description':nextRoom.description, 'coords': nextRoom.coords, 'n_to': nextRoom.n_to, 's_to': nextRoom.s_to, 'e_to': nextRoom.e_to, 'w_to': nextRoom.w_to, 'players':players, 'error_msg':""}, safe=True)
     else:
         players = room.playerNames(player_id)
-        return JsonResponse({'name':player.user.username, "visited-room-ids": player.seen_rooms, "room-id":nextRoom.id, 'title':room.title, 'description':room.description, 'coords': nextRoom.coords, 'n_to': nextRoom.n_to, 's_to': nextRoom.s_to, 'e_to': nextRoom.e_to, 'w_to': nextRoom.w_to, 'players':players, 'error_msg':"You cannot move that way."}, safe=True)
+        return JsonResponse({'name':player.user.username, "visited-room-ids": player.seen_rooms, "room-id":room.id, 'title':room.title, 'description':room.description, 'coords': room.coords, 'n_to': nextRoom.n_to, 's_to': nextRoom.s_to, 'e_to': room.e_to, 'w_to': room.w_to, 'players':players, 'error_msg':"You cannot move that way."}, safe=True)
 
 # Get all rooms
 @api_view(["GET"])
 def all_rooms(request):
     data = []
     for i in Room.objects.all():
-        data.append({'title': i.title, 'description':i.description, 'coords':i.coords, 'n_to':i.n_to, 's_to':i.s_to, 'e_to':i.e_to, 'w_to':i.w_to})
+        data.append({'id': i.id, 'title': i.title, 'description':i.description, 'coords':i.coords, 'n_to':i.n_to, 's_to':i.s_to, 'e_to':i.e_to, 'w_to':i.w_to})
     return JsonResponse(data, safe=False)
 
 

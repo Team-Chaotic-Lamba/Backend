@@ -45,7 +45,7 @@ class Generator():
     def __init__(self):
         self.dimensions = 30
         self.total_rooms = 100
-        self.max_length = 8
+        self.max_length = 6
         self.count = 0
         self.saved_rooms = {}
         self.room_list = []

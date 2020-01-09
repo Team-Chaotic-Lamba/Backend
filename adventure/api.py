@@ -77,8 +77,11 @@ def say(request):
     # IMPLEMENT
     return JsonResponse({'error':"Not yet implemented"}, safe=True, status=500)
 
-@csrf_exempt
-@api_view(["POST"])
+@api_view(["GET"])
 def make_map(request):
-    generate = Generator()
-    generate.create_map()
+    try:
+        generate = Generator()
+        generate.create_map()
+        return JsonResponse({"created"}, safe=False, status=201)
+    except:
+        return JsonResponse({"failed"}, safe=False, status=500)
